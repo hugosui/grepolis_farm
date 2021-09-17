@@ -1,0 +1,21 @@
+{
+    "compilerOptions": {
+        "baseUrl": "src",
+        "target": "es5",
+        "lib": [
+            "es5",
+            "dom",
+            "ES2015"
+        ],
+        "types": [
+            "cypress",
+            "cypress-file-upload",
+            "@testing-library/cypress"
+        ],
+        "allowJs": true,
+        "allowSyntheticDefaultImports": true
+    },
+    "include": [
+        "./**/*.ts"
+    ]
+}
