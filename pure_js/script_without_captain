@@ -1,80 +1,73 @@
-function createTempsAlea(tempsMini, tempsMaxi){
-    
+
+//Script to automatize farmtown's task when you don't have captain :)
+
+
+function createTempsAlea(tempsMini, tempsMaxi) {
+
     //Génère un temps aléatoire en ms, entre "tempsMini" et "tempsMaxi" en ms
-    
-    var tempsAlea = Math.floor(Math.random() * (tempsMaxi - tempsMini)) + tempsMini;
-    return tempsAlea;
+
+    var tempsAlea = Math.floor(Math.random() * (tempsMaxi - tempsMini)) + tempsMini
+    return tempsAlea
 }
 
-function getVillageName(){
-    var text = document.getElementsByClassName("village_name");
-    var village_name_output = text[0].innerText;
-    return village_name_output;
+function getVillageName() {
+    var text = document.getElementsByClassName("village_name")
+    var village_name_output = text[0].innerText
+    console.log(village_name_output)
+    return village_name_output
 }
+
+function farmtown() {
+    document.querySelector("div.action_card.resources_bpv > div.card_click_area > div.btn_claim_resources.button.button_new").click()
+    document.querySelector("div.btn_next.square.next_prev.small.button.button_new").click()
+}
+
+function close_farmtown_window() {
+    document.querySelector("div.btn_wnd.minimize").click()
+}
+
 
 function farm() {
 
-    elt = document.createElement("div");
-    elt.id = "UI_decompte";
-    elt.style.position = "absolute";
-    elt.style.bottom = "40px";
-    elt.style.left = "40px";
-    elt.style.backgroundColor = "aqua";
-    elt.style.zIndex = 2;
-    elt.style.padding = "20px";
+    elt = document.createElement("div")
+    elt.id = "UI_decompte"
+    elt.style.position = "absolute"
+    elt.style.bottom = "40px"
+    elt.style.left = "40px"
+    elt.style.backgroundColor = "aqua"
+    elt.style.zIndex = 2
+    elt.style.padding = "20px"
 
-    decompte = document.createElement("div");
-    decompte.innerText = "---- en cours de pillage ---";
-    
-    addAlea = document.createElement("div");
-    addAlea.innerText = "";
+    decompte = document.createElement("div")
+    decompte.innerText = "---- en cours de pillage ---"
 
-    elt.appendChild(decompte);
-    elt.appendChild(addAlea);
+    addAlea = document.createElement("div")
+    addAlea.innerText = ""
 
-    document.body.append(elt);
-    //id island_530_468  gp_island_link
-    var all_cities = document.querySelector("#fto_town_wrapper > div > div.game_header.bold > span > a");
-    var pause = 2000;
+    elt.appendChild(decompte)
+    elt.appendChild(addAlea)
 
-    if (all_cities == null) {
-        console.log("faut ouvrir l'aperçu svp");
-        document.querySelector("ul.game_list > :nth-child(2) > .gp_island_link").click();
-        document.querySelector("#island_info").click()
-        document.querySelector("li.odd.farm_town_el_398>a.gp_town_link").click();
-        const nb_farm_towns = 6; let i = 0;
-        while(i < nb_farm_towns){
-            document.querySelector("div.action_card.resources_bpv > div.card_click_area > div.btn_claim_resources.button.button_new").click();
-            getVillageName();
-            i++;
-            document.querySelector("div.btn_next.square.next_prev.small.button.button_new").click();
-        }
-        document.querySelector("toolbar_button.inventory").click();
-        //div.island_info_towns.island_info_right > div > ul > li:first-of-type").click();
-        //document.querySelector("#overviews_link_hover_menu > div.box.middle.left > div > div > ul > li.subsection.captain.enabled > ul > li.farm_town_overview > a").click();
-    }
-    
+    document.body.append(elt)
+
     var tempsMini = 5000
     var tempsMaxi = 23000
-    
-    var tempsAlea = createTempsAlea(tempsMini, tempsMaxi);
 
-    window.setTimeout(function() {
-        document.querySelector("#fto_town_wrapper > div > div.game_header.bold > span > a").click();
-        window.setTimeout(function() {
-            document.querySelector("#fto_claim_button > div.caption.js-caption").click();
-            window.setTimeout(function() {
-                document.querySelector('.btn_confirm > div:nth-child(3)').click();
-                console.log('récolte des paysans effectué à : ', Date());
-                decompte.innerText = "récolte effectué à : " + Date().substring(16, 24);
-                addAlea.innerText = "temps random ajouté :" +  + tempsAlea + "ms";
-            }, pause);
-        }, pause);
-    }, pause);
-    
-    
-    window.DELAI = 600 ;
-    setTimeout(farm, window.DELAI * 1000 + tempsAlea);
+    var tempsAlea = createTempsAlea(tempsMini, tempsMaxi)
+
+    const number_town = 6
+    for (let i = 0; i < number_town; i++) {
+        setTimeout(function () {
+            farmtown();
+            getVillageName();
+        }, i * 950)
+    }
+    close_farmtown_window();
+    console.log('récolte des paysans effectué à : ', Date())
+    decompte.innerText = "récolte effectué à : " + Date().substring(16, 24)
+    addAlea.innerText = "temps random ajouté :" + + tempsAlea + "ms"
+
+    window.DELAI = 600
+    setTimeout(farm, window.DELAI * 1000 + tempsAlea)
 }
 
 farm();
