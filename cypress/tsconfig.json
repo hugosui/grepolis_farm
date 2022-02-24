@@ -17,5 +17,5 @@
     },
     "include": [
         "./**/*.ts"
-    ]
+, "cypress/integration/*", "cypress/support/commands.js"    ]
 }
