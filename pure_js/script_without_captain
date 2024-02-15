@@ -49,8 +49,10 @@ function farm() {
 
     document.body.append(elt)
 
-    var tempsMini = 5000
-    var tempsMaxi = 23000
+    // var tempsMini = 5000
+    // var tempsMaxi = 23000
+    var tempsMini = 2500
+    var tempsMaxi = 10000
 
     var tempsAlea = createTempsAlea(tempsMini, tempsMaxi)
 
