@@ -1,0 +1,79 @@
+//Pour faire cela je dois savoir rapidement combien j'ai de villes 
+//Combien j'ai de villages par villes
+
+// This will select all <span> elements with the class 'town_name'
+var townElements = document.querySelectorAll('span.town_name');
+
+// This will create an array of town names by extracting the inner text of each 'town_name' element
+var townNames = Array.from(townNameElements).map(function(element) {
+    console.log(element);
+  return element.innerText.trim(); // .trim() to remove any potential whitespace
+});
+
+console.log('Nombre de villes:', townElements.length); 
+console.log('Nom des villes:', townNames);
+
+
+
+function waitForElement(selector, callback) {
+const observer = new MutationObserver(mutations => {
+    mutations.forEach(mutation => {
+    const elements = Array.from(mutation.addedNodes)
+        .filter(node => node.matches && node.matches(selector));
+    if (elements.length > 0) {
+        callback(elements[0]);
+        observer.disconnect(); // Stop watching for changes
+    }
+    });
+});
+
+observer.observe(document.body, {
+    childList: true,
+    subtree: true
+});
+}
+
+function simulateClick(selector) {
+const element = document.querySelector(selector);
+if (element) {
+    try {
+    element.click();
+    } catch (error) {
+    console.error('Error trying to simulate click:', error);
+    }
+} else {
+    console.error('No element found with the selector:', selector);
+}
+}
+
+// Call the function with the correct selector
+simulateClick('div.button.js-button-caption');
+
+
+// document.addEventListener('DOMContentLoaded', (event) => {
+//     const selectedDiv = document.querySelector('.town_group_town.selected');
+//     if (selectedDiv) {
+//       const townId = selectedDiv.getAttribute('data-townid');
+//       console.log(townId);
+//     }
+// });
+document.querySelector('.town_group_town.selected').getAttribute('data-townid');
+document.querySelector('.town_group_town.selected').querySelector('.town_name').textContent.trim();
+
+// Simulate a click on the flag to open island info
+const townFlag = document.getElementById(`town_flag_${cityId}`);
+
+  // Usage
+  waitForElement(`#town_flag_${cityId}`, function(element) {
+    // Element is now available
+    simulateClick(element);
+  
+    // After simulating the click, wait for the 'info' element to appear
+    waitForElement('#info', function(infoElement) {
+      simulateClick(infoElement);
+  
+      // After clicking 'info', the island information should be visible
+      // You might need to wait for the '.gp_island_link' to be visible as well
+    });
+  });
+  
