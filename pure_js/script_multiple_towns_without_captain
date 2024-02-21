@@ -1,0 +1,150 @@
+//Pour faire cela je dois savoir rapidement combien j'ai de villes 
+//Combien j'ai de villages par villes
+
+function simulateClick(selector) {
+const element = document.querySelector(selector);
+if (element) {
+    try {
+    element.click();
+    } catch (error) {
+    console.error('Error trying to simulate click:', error);
+    }
+} else {
+    console.error('No element found with the selector:', selector);
+}
+}
+
+// Call the function with the correct selector
+
+function processTownElements() {
+  // Select the container of the town elements
+  const container = document.querySelector('.inner_column.inner_column_0');
+  if (container) {
+    // Select all the div elements representing towns within the container
+    const townElements = container.querySelectorAll('.item.town_group_town');
+    
+    // Iterate through the town elements and extract the information
+    const townsInfo = Array.from(townElements).map(town => {
+      const nameElement = town.querySelector('.town_name');
+      const name = nameElement.textContent.trim(); // Or use town.querySelector if the name is within a child element
+      const id = town.getAttribute('data-townid');
+      getFarmTownsOnSameIsland();
+      return { id, name };
+    });
+
+    // Log the total number of towns and their information
+    console.log('Number of towns:', townsInfo.length);
+    console.log('Towns:', townsInfo);
+  } else {
+    console.error('Town container not found');
+  }
+}
+
+// Simulate the click and set a 2-second delay before processing the town elements
+simulateClick('div.button.js-button-caption');
+setTimeout(processTownElements, 2000);
+
+simulateClick('.btn_jump_to_town.circle_button.jump_to_town');
+
+function simulateFullClick(selector) {
+  const element = document.querySelector(selector);
+
+  if (element) {
+    // Create the mouse events
+    const mouseDownEvent = new MouseEvent('mousedown', { bubbles: true, cancelable: true, view: window });
+    const mouseUpEvent = new MouseEvent('mouseup', { bubbles: true, cancelable: true, view: window });
+    const clickEvent = new MouseEvent('click', { bubbles: true, cancelable: true, view: window });
+
+    // Dispatch the mouse down event
+    element.dispatchEvent(mouseDownEvent);
+    // Dispatch the mouse up event
+    element.dispatchEvent(mouseUpEvent);
+    // Dispatch the click event
+    element.dispatchEvent(clickEvent);
+  } else {
+    console.error('Element not found for selector:', selector);
+  }
+}
+
+function getFarmTownsOnSameIsland(){
+
+  // Select all elements that have a class 'owned' and 'data-same_island' attribute set to 'true'
+  const ownedFarmTownsOnSameIsland = document.querySelectorAll('.owned[data-same_island="true"]');
+
+  // Log the number of such farm towns
+  console.log('Nombre de villages de paysans:', ownedFarmTownsOnSameIsland.length);
+  
+  // To list their IDs or any other actions, iterate over the NodeList
+  Array.from(ownedFarmTownsOnSameIsland).forEach(farmTown => {
+    // Assuming the ID you want is stored in 'data-id'
+    const farmTownId = farmTown.getAttribute('data-id');
+    firstFarmTownId = ownedFarmTownsOnSameIsland[0].getAttribute('data-id');
+    simulateFullClick(`#farm_town_${firstFarmTownId}_claim`);
+
+    elt = document.createElement("div")
+    elt.id = "UI_decompte"
+    elt.style.position = "absolute"
+    elt.style.bottom = "40px"
+    elt.style.left = "40px"
+    elt.style.backgroundColor = "aqua"
+    elt.style.zIndex = 2
+    elt.style.padding = "20px"
+
+    decompte = document.createElement("div")
+    decompte.innerText = "---- en cours de pillage ---"
+
+    addAlea = document.createElement("div")
+    addAlea.innerText = ""
+
+    elt.appendChild(decompte)
+    elt.appendChild(addAlea)
+
+    document.body.append(elt)
+
+   
+
+
+    for (let i = 0; i < ownedFarmTownsOnSameIsland.length; i++) {
+        setTimeout(function () {
+            farmtown();
+        }, i * 950)
+    }
+    close_farmtown_window();
+    simulateClick('.btn_next_town.button_arrow.right');
+  });
+  var tempsMini = 5000
+  var tempsMaxi = 23000
+  var tempsAlea = createTempsAlea(tempsMini, tempsMaxi)
+  console.log('récolte des paysans effectué à : ', Date())
+  var nextHarvestTime = new Date(Date.now() + window.DELAI * 1000 + tempsAlea);
+  console.log('La prochaine récolte des paysans aura lieu à : ', nextHarvestTime.toLocaleString());
+  decompte.innerText = "récolte effectué à : " + Date().substring(16, 24)
+  addAlea.innerText = "temps random ajouté :" + + tempsAlea + "ms"
+  window.DELAI = 600
+  setTimeout(getFarmTownsOnSameIsland, window.DELAI * 1000 + tempsAlea)
+  console.log(farmTownId); // Log each farm town's ID
+  // Any additional actions can be performed within this loop
+
+
+}
+
+function createTempsAlea(tempsMini, tempsMaxi) {
+
+  //Génère un temps aléatoire en ms, entre "tempsMini" et "tempsMaxi" en ms
+
+  var tempsAlea = Math.floor(Math.random() * (tempsMaxi - tempsMini)) + tempsMini
+  return tempsAlea
+}
+
+
+function farmtown() {
+  document.querySelector("div.action_card.resources_bpv > div.card_click_area > div.btn_claim_resources.button.button_new").click()
+  document.querySelector("div.btn_next.square.next_prev.small.button.button_new").click()
+}
+
+function close_farmtown_window() {
+  document.querySelector("div.btn_wnd.minimize").click()
+}
+
+
+getFarmTownsOnSameIsland();
